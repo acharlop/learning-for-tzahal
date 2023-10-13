@@ -1,5 +1,9 @@
 import type { ExpoConfig } from "@expo/config";
 
+
+
+
+
 const defineConfig = (): ExpoConfig => ({
   name: "expo",
   slug: "expo",
@@ -11,7 +15,7 @@ const defineConfig = (): ExpoConfig => ({
   splash: {
     image: "./assets/icon.png",
     resizeMode: "contain",
-    backgroundColor: "#1F104A",
+    backgroundColor: "#005596",
   },
   updates: {
     fallbackToCacheTimeout: 0,
@@ -25,7 +29,7 @@ const defineConfig = (): ExpoConfig => ({
     package: "your.bundle.identifier",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
-      backgroundColor: "#1F104A",
+      backgroundColor: "#005596",
     },
   },
   // extra: {

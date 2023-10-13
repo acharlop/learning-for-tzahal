@@ -101,18 +101,18 @@ const Index = () => {
   });
 
   return (
-    <SafeAreaView className="bg-[#1F104A]">
+    <SafeAreaView className="bg-[#005596]">
       {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: "Home Page" }} />
+      <Stack.Screen options={{ title: "Home Page", headerTitleStyle: { color: '#FFFFFF'} }} />
       <View className="h-full w-full p-4">
-        <Text className="mx-auto pb-2 text-5xl font-bold text-white">
-          Create <Text className="text-pink-400">T3</Text> Turbo
+        <Text className="mx-auto pb-2 text-5xl font-bold text-white text-center">
+          Choose a portion
         </Text>
 
         <Button
           onPress={() => void utils.post.all.invalidate()}
           title="Refresh posts"
-          color={"#f472b6"}
+          color={"#AE1D55"}
         />
 
         <View className="py-2">

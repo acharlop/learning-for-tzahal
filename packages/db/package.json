@@ -6,25 +6,27 @@
   "types": "./index.ts",
   "license": "MIT",
   "scripts": {
+    "postinstall": "pnpm run generate",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "push": "drizzle-kit push:mysql",
-    "studio": "drizzle-kit studio",
+    "generate": "pnpm with-env prisma generate",
+    "push": "pnpm with-env prisma db push",
+    "studio": "pnpm with-env prisma studio",
+    "with-env": "dotenv -e ../../.env -- ",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@planetscale/database": "^1.11.0",
-    "drizzle-orm": "^0.28.6"
+    "@prisma/client": "^5.4.2"
   },
   "devDependencies": {
     "@acme/eslint-config": "^0.2.0",
     "@acme/prettier-config": "^0.1.0",
     "@acme/tsconfig": "^0.1.0",
     "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.19.13",
     "eslint": "^8.50.0",
     "prettier": "^3.0.3",
+    "prisma": "^5.4.2",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {
