@@ -1,37 +1,28 @@
 {
-  "name": "@acme/db",
-  "version": "0.1.0",
+  "name": "@acme/scripts",
   "private": true,
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "version": "0.1.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "postinstall": "pnpm run generate",
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "generate": "pnpm with-env prisma generate",
-    "push": "pnpm with-env prisma db push",
-    "studio": "pnpm with-env prisma studio",
-    "with-env": "dotenv -e ../../.env -- ",
+    "seed": "ts-node ./src/seed.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^5.4.2"
+    "@acme/db": "^0.1.0",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
-    "@acme/eslint-config": "^0.2.0",
+    "@acme/eslint-config": "0.2.0",
     "@acme/prettier-config": "^0.1.0",
     "@acme/tsconfig": "^0.1.0",
-    "dotenv-cli": "^7.3.0",
     "eslint": "^8.50.0",
-    "prettier": "^3.0.3",
-    "prisma": "^5.4.2",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {
-    "root": true,
     "extends": [
       "@acme/eslint-config/base"
     ]

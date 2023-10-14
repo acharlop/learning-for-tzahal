@@ -7,6 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Book {
+  id        Int      @id @default(autoincrement())
+  hebrew    String?
+  name      String  @unique
+  books     Chapter[]
+}
+
+model Chapter {
+  id         Int      @id @default(autoincrement())
+  bookId   Int
+  book     Book @relation(fields: [bookId], references: [id])
+  name     String  @unique
+  hebrew   String?
+  portions Portion[]
+}
+
+model Portion {
+  id         Int      @id @default(autoincrement())
+  chapterId  Int
+  chapter    Chapter @relation(fields: [chapterId], references: [id])
+  name       String
+  hebrew     String?
+  readings   Reading[]
+}
+
+model Reading {
+  id          Int      @id @default(autoincrement())
+  week        Int
+  readerId    String
+  reader      User     @relation(fields: [readerId], references: [id])
+  portionId   Int
+  portion     Portion  @relation(fields: [portionId], references: [id])
+  status      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
@@ -24,6 +61,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  readings      Reading[]
 }
 
 model Account {

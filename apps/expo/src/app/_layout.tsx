@@ -2,6 +2,9 @@ import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
+
+
+import { IdsProvider } from "~/stores/ids";
 import { TRPCProvider } from "~/utils/api";
 
 // This is the main layout of the app
@@ -9,18 +12,20 @@ import { TRPCProvider } from "~/utils/api";
 const RootLayout = () => {
   return (
     <TRPCProvider>
-      {/*
+      <IdsProvider>
+        {/*
         The Stack component displays the current page.
         It also allows you to configure your screens 
       */}
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: "#AE1D55",
-          },
-        }}
-      />
-      <StatusBar />
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#AE1D55",
+            },
+          }}
+        />
+        <StatusBar />
+      </IdsProvider>
     </TRPCProvider>
   );
 };
