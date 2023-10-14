@@ -1,9 +1,11 @@
 import { Text } from "react-native";
 
+
+
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
-import { LinkRow } from "./_components/LinkRow";
-import { List } from "./_components/List";
+import { LinkRow } from "../components/LinkRow";
+import { List } from "../components/List";
 
 interface Props {
   item: RouterOutputs["book"]["all"][number];
@@ -11,11 +13,16 @@ interface Props {
 
 const ItemCard = ({ item }: Props) => {
   return (
-    // <LinkRow>
-    <Text className="text-xl font-semibold capitalize text-white">
-      {item.name}
-    </Text>
-    // </LinkRow>
+    <LinkRow
+      href={{
+        pathname: "/book/[bookId]/",
+        params: { bookId: item.id },
+      }}
+    >
+      <Text className="text-xl font-semibold capitalize text-white">
+        {item.name}
+      </Text>
+    </LinkRow>
   );
 };
 

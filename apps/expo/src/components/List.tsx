@@ -17,7 +17,7 @@ export const List = <T,>({
   headerTitle,
   renderItem,
 }: Props<T>) => {
-  if (!data) return "Loading...";
+  if (!data) return <Text>Loading...</Text>;
 
   return (
     <SafeAreaView className="bg-[#005596]">
@@ -25,8 +25,7 @@ export const List = <T,>({
       <Stack.Screen
         options={{
           headerTitle,
-          headerBackTitle: "",
-          headerTintColor: "#FFFFFF",
+          headerTintColor: "#fff",
           headerBackTitleVisible: false,
           headerTitleStyle: {
             color: "#FFFFFF",
