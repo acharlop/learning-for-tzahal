@@ -36,10 +36,10 @@ model Reading {
   id          Int      @id @default(autoincrement())
   week        Int
   readerId    String
-  reader      User     @relation(fields: [readerId], references: [id])
+  // reader      User     @relation(fields: [readerId], references: [id])
   portionId   Int
   portion     Portion  @relation(fields: [portionId], references: [id])
-  status      Boolean  @default(false)
+  isRead      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -61,7 +61,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  readings      Reading[]
+  // readings      Reading[]
 }
 
 model Account {

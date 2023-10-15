@@ -4,6 +4,10 @@ import { SafeAreaView, Text, View } from "react-native";
 import { Stack } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
+
+
+import { Loader } from "./loader";
+
 interface Props<T> extends PropsWithChildren<unknown> {
   data?: T[];
   title: string;
@@ -16,9 +20,8 @@ export const List = <T,>({
   title,
   headerTitle,
   renderItem,
+  children,
 }: Props<T>) => {
-  if (!data) return <Text>Loading...</Text>;
-
   return (
     <SafeAreaView className="bg-[#005596]">
       {/* Changes page title visible on the header */}
@@ -37,12 +40,17 @@ export const List = <T,>({
           {title}
         </Text>
 
-        <FlashList
-          data={data}
-          estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={renderItem}
-        />
+        {!data ? (
+          <Loader />
+        ) : (
+          <FlashList
+            data={data}
+            estimatedItemSize={20}
+            ItemSeparatorComponent={() => <View className="h-2" />}
+            renderItem={renderItem}
+          />
+        )}
+        {children}
       </View>
     </SafeAreaView>
   );

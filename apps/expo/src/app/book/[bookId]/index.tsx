@@ -1,6 +1,8 @@
 import { Text } from "react-native";
 import { useGlobalSearchParams } from "expo-router";
 
+
+
 import { LinkRow } from "~/components/LinkRow";
 import { List } from "~/components/List";
 import { api } from "~/utils/api";
@@ -21,7 +23,7 @@ const ItemCard = ({ item }: Props) => {
         },
       }}
     >
-      <Text className="text-xl font-semibold capitalize text-white">
+      <Text className="text-md font-semibold capitalize text-white opacity-90">
         {item.book.name}
       </Text>
       <Text className="text-lg font-semibold capitalize text-white">
@@ -33,15 +35,15 @@ const ItemCard = ({ item }: Props) => {
 
 const ChooseChapter = () => {
   const { bookId } = useGlobalSearchParams();
-  if (!bookId || typeof bookId !== "string") throw new Error("unreachable");
 
-  const { data, isFetching } = api.chapter.byBookId.useQuery({
-    id: parseInt(bookId),
-  });
-
-  if (isFetching) return <Text>Loading...</Text>;
-
-  if (!data) return null;
+  const { data } = api.chapter.byBookId.useQuery(
+    {
+      id: parseInt(bookId as string),
+    },
+    {
+      enabled: !!bookId,
+    },
+  );
 
   return (
     <List

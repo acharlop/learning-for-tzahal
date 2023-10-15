@@ -1,12 +1,20 @@
 import type { PropsWithChildren } from "react";
 import { createContext, useContext, useState } from "react";
 
-type SetId = (key: "bookId" | "chapterId" | "portionId", value: number) => void;
+
+
+
+
+type SetId = (
+  key: "bookId" | "chapterId" | "portionId" | "userId",
+  value: number | string,
+) => void;
 
 interface IdsContextType {
   bookId: number;
   chapterId: number;
   portionId: number;
+  userId: string;
   setId: SetId;
 }
 
@@ -14,6 +22,7 @@ const initialIds = {
   bookId: -1,
   chapterId: -1,
   portionId: -1,
+  userId: "",
 };
 
 const IdsContext = createContext<IdsContextType>({

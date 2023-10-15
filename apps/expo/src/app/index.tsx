@@ -1,9 +1,11 @@
-import { Text } from "react-native";
+import { useEffect } from "react";
+import { Text, View } from "react-native";
 
-
-
+import { ReadingList } from "~/components/readingsList";
+import { useIds } from "~/stores/ids";
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
+import { upsertUserId } from "~/utils/userId";
 import { LinkRow } from "../components/LinkRow";
 import { List } from "../components/List";
 
@@ -28,6 +30,13 @@ const ItemCard = ({ item }: Props) => {
 
 const LandingPage = () => {
   const { data } = api.book.all.useQuery();
+  const { userId, setId } = useIds();
+
+  useEffect(() => {
+    void upsertUserId().then((id) => {
+      setId("userId", id);
+    });
+  }, []);
 
   return (
     <List
@@ -35,7 +44,9 @@ const LandingPage = () => {
       title="Select: Tanach"
       data={data}
       renderItem={(p) => <ItemCard item={p.item} />}
-    />
+    >
+      {userId && <ReadingList userId={userId} />}
+    </List>
   );
 };
 

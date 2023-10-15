@@ -3,6 +3,7 @@ import { booksRouter } from "./router/books";
 import { chapterRouter } from "./router/chapter";
 import { portionRouter } from "./router/portion";
 import { postRouter } from "./router/post";
+import { readingRouter } from "./router/reading";
 import { createTRPCRouter } from "./trpc";
 
 export const appRouter = createTRPCRouter({
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   book: booksRouter,
   chapter: chapterRouter,
   portion: portionRouter,
+  reading: readingRouter,
 });
 
 // export type definition of API
