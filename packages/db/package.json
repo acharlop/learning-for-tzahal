@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "generate": "pnpm with-env prisma generate",
-    "push": "pnpm with-env prisma db push",
+    "push": "pnpm with-env prisma db push && pnpm generate",
     "studio": "pnpm with-env prisma studio",
     "with-env": "dotenv -e ../../.env -- ",
     "typecheck": "tsc --noEmit"

@@ -1,6 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+
+
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 const createReadingSchema = z.object({
@@ -16,6 +18,18 @@ const updateReadingSchema = z.object({
 export const readingRouter = createTRPCRouter({
   all: publicProcedure.query(({ ctx }) => ctx.prisma.reading.findMany({})),
 
+  countRemaining: publicProcedure.query(async ({ ctx }) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({});
+    const [total, count] = await Promise.all([
+      ctx.prisma.portion.count({}),
+      ctx.prisma.reading.count({
+        where: { week: settings.week },
+      }),
+    ]);
+
+    return { settings, remaining: total - count };
+  }),
+
   byUserId: publicProcedure
     .input(z.object({ readerId: z.string() }))
     .query(({ ctx, input }) => {
@@ -29,9 +43,11 @@ export const readingRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(createReadingSchema)
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const settings = await ctx.prisma.settings.findFirstOrThrow({});
+
       return ctx.prisma.reading.create({
-        data: { ...input, week: 1 },
+        data: { ...input, week: settings.week },
       });
     }),
 

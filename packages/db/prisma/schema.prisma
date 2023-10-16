@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Settings {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  week      Int
+  readOnly1 Boolean  @default(true)
+}
+
 model Book {
   id        Int      @id @default(autoincrement())
   hebrew    String?

@@ -1,9 +1,12 @@
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { router, Stack, useGlobalSearchParams } from "expo-router";
 
+
+
 import { Loader } from "~/components/loader";
 import { useIds } from "~/stores/ids";
 import { api } from "~/utils/api";
+
 
 const ViewPortion = () => {
   const { portionId } = useGlobalSearchParams();
@@ -21,7 +24,10 @@ const ViewPortion = () => {
         readerId: userId,
         portionId: parseInt(portionId as string),
       });
-      router.push("/");
+      router.push({
+        pathname: "/",
+        params: { refresh: "true" },
+      });
     } catch (error) {
       console.error(error);
     }
