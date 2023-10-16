@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 import { Loader } from "./loader";
 
+
 interface ItemProps {
   item: RouterOutputs["reading"]["byUserId"][number];
   userId: string;
@@ -63,7 +64,7 @@ export const ReadingList = ({ userId, setHasReading }: Props) => {
   );
 
   useEffect(() => {
-    setHasReading(!!data);
+    setHasReading(!!data?.length);
   }, [data, setHasReading, isLoading]);
 
   if (isLoading) return <Loader />;

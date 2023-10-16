@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
-import { Stack, useGlobalSearchParams, useSegments } from "expo-router";
-
-
+import { Stack, usePathname } from "expo-router";
 
 import { Loader } from "~/components/loader";
 import { ReadingList } from "~/components/readingsList";
@@ -11,13 +9,12 @@ import { api } from "~/utils/api";
 import { upsertUserId } from "~/utils/userId";
 import { LinkRow } from "../components/LinkRow";
 
-
 const LandingPage = () => {
   const { userId, setId } = useIds();
   const [hasReading, setHasReading] = useState<boolean | undefined>();
   const [showMore, setShowMore] = useState(false);
-  const segments = useSegments();
   const utils = api.useContext();
+  const pathname = usePathname();
 
   const { data, isLoading } = api.reading.countRemaining.useQuery();
 
@@ -28,14 +25,14 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!segments?.length) {
+    if (pathname === "/") {
       void utils.reading.countRemaining.invalidate();
       void utils.reading.countRemaining.refetch();
       void utils.reading.byUserId.invalidate();
       void utils.reading.byUserId.refetch();
       void utils.portion.unreadByChapterId.invalidate();
     }
-  }, [segments]);
+  }, [pathname]);
 
   return (
     <SafeAreaView className="bg-[#005596]">
@@ -78,7 +75,8 @@ const LandingPage = () => {
             {showMore ? " Show less..." : " Show more..."}
           </Text>
         </Pressable>
-        {(hasReading === false || !data?.settings.readOnly1) && (
+        {(hasReading === false ||
+          (hasReading && !data?.settings.readOnly1)) && (
           <LinkRow href="/choose" className="bg-brand-red">
             <Text className="text-xl font-semibold capitalize text-white">
               Choose portion to learn

@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
+
 const createReadingSchema = z.object({
   readerId: z.string(),
   portionId: z.number(),
@@ -32,13 +33,14 @@ export const readingRouter = createTRPCRouter({
 
   byUserId: publicProcedure
     .input(z.object({ readerId: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      const settings = await ctx.prisma.settings.findFirstOrThrow({});
       return ctx.prisma.reading.findMany({
-        where: { readerId: input.readerId },
+        where: { readerId: input.readerId, AND: { week: settings.week } },
         include: {
           portion: { include: { chapter: { include: { book: true } } } },
         },
-        orderBy: { isRead: "asc" }
+        orderBy: { isRead: "asc" },
       });
     }),
 

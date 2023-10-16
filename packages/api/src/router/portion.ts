@@ -20,10 +20,18 @@ export const portionRouter = createTRPCRouter({
   unreadByChapterId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
+      const settings = await ctx.prisma.settings.findFirstOrThrow({});
+
       const [portions, chapter] = await Promise.all([
         ctx.prisma.portion.findMany({
-          where: { chapterId: input.id, AND: { readings: { none: {} } } },
+          where: {
+            chapterId: input.id,
+            AND: { readings: { none: { week: settings.week } } },
+          },
           orderBy: { id: "asc" },
+          include: {
+            readings: true,
+          },
         }),
         ctx.prisma.chapter.findFirst({
           where: { id: input.id },
