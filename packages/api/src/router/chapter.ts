@@ -15,6 +15,7 @@ export const chapterRouter = createTRPCRouter({
       return ctx.prisma.chapter.findMany({
         where: { bookId: input.id },
         include: { book: true },
+        orderBy: { id: 'asc' },
       });
     }),
 });

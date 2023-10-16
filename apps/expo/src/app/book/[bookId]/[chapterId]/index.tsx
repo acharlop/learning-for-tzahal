@@ -1,14 +1,17 @@
 import { Text } from "react-native";
 import { useGlobalSearchParams } from "expo-router";
 
+
+
 import { LinkRow } from "~/components/LinkRow";
 import { List } from "~/components/List";
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 
+
 interface Props {
-  item: RouterOutputs["portion"]["byChapterId"]["portions"][number];
-  chapter?: RouterOutputs["portion"]["byChapterId"]["chapter"];
+  item: RouterOutputs["portion"]["unreadByChapterId"]["portions"][number];
+  chapter?: RouterOutputs["portion"]["unreadByChapterId"]["chapter"];
 }
 
 const ItemCard = ({ item, chapter }: Props) => {
@@ -32,7 +35,7 @@ const ItemCard = ({ item, chapter }: Props) => {
 
 const ChooseSection = () => {
   const { chapterId } = useGlobalSearchParams();
-  const { data } = api.portion.byChapterId.useQuery(
+  const { data } = api.portion.unreadByChapterId.useQuery(
     {
       id: parseInt(chapterId as string),
     },

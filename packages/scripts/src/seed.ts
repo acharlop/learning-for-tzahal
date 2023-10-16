@@ -1,5 +1,9 @@
 import { prisma } from "@acme/db";
 
+
+
+
+
 const books = ["torah", "neviim", "ketuvim"];
 
 const chapters = [
@@ -420,39 +424,58 @@ const data = [
 ] as const;
 
 const main = async () => {
-  // await Promise.allSettled(
-  //   books.map((item) => prisma.book.create({ data: { name: item } })),
-  // );
+  //   const createdBooks = await Promise.all(
+  //     books.map((item, idx) => prisma.book.create({ data: { name: item, id: idx + 1 } })),
+  //   );
 
-  // await Promise.allSettled(
-  //   chapters.map((item) =>
-  //     prisma.chapter.create({
-  //       data: {
-  //         name: item.chapter,
-  //         book: {
-  //           connect: {
-  //             name: item.book,
-  //           },
-  //         },
-  //       },
-  //     }),
+  //   createdBooks.map((book) => {
+  //     chapters.filter(i => i.book === book.name).map((item, idx) =>
+  //           prisma.chapter.create({
+  //             data: {
+  //               id: idx + 1,
+  //               name: item.chapter,
+  //               book: {
+  //                 connect: {
+  //                   id: book.id,
+  //                 },
+  //               },
+  //             },
+  //           })
+  //     )})
+  // const createdChapters = await Promise.all(
+
   //   ),
   // );
 
-  await Promise.allSettled(
-    data.map((item) =>
-      prisma.portion.create({
-        data: {
-          name: item.chapter,
-          chapter: {
-            connect: {
-              name: item.book,
+  const chaptersFromDb = await prisma.chapter.findMany({});
+
+  const getId = (name: string): number => {
+    const el = chaptersFromDb.find((chapter) => chapter.name === name);
+    if (!el) {
+      throw new Error(`Could not find chapter ${name}`);
+    }
+    return el.id;
+  };
+
+  chaptersFromDb.map((chapter) => {
+    data
+      .filter((i) => i.chapter === chapter.name)
+      .map(
+        async (item, idx) =>
+          await prisma.portion.create({
+            // @ts-ignore
+            data: {
+              id: idx + 1,
+              name: item.chapter,
+              chapter: {
+                connect: {
+                  id: getId(item.book),
+                },
+              },
             },
-          },
-        },
-      }),
-    ),
-  );
+          }),
+      );
+  });
 };
 
 void main();

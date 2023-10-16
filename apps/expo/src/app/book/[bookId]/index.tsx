@@ -22,6 +22,7 @@ const ItemCard = ({ item }: Props) => {
           bookId: item.book.id.toString(),
         },
       }}
+      className='flex flex-col'
     >
       <Text className="text-md font-semibold capitalize text-white opacity-90">
         {item.book.name}

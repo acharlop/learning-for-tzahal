@@ -38,6 +38,7 @@ export const readingRouter = createTRPCRouter({
         include: {
           portion: { include: { chapter: { include: { book: true } } } },
         },
+        orderBy: { isRead: "asc" }
       });
     }),
 

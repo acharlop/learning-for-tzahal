@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import { Stack, useGlobalSearchParams } from "expo-router";
+import { Pressable, SafeAreaView, Text, View } from "react-native";
+import { Stack, useGlobalSearchParams, useSegments } from "expo-router";
+
+
 
 import { Loader } from "~/components/loader";
 import { ReadingList } from "~/components/readingsList";
@@ -9,11 +11,13 @@ import { api } from "~/utils/api";
 import { upsertUserId } from "~/utils/userId";
 import { LinkRow } from "../components/LinkRow";
 
+
 const LandingPage = () => {
-  const { refresh } = useGlobalSearchParams();
   const { userId, setId } = useIds();
   const [hasReading, setHasReading] = useState<boolean | undefined>();
   const [showMore, setShowMore] = useState(false);
+  const segments = useSegments();
+  const utils = api.useContext();
 
   const { data, isLoading } = api.reading.countRemaining.useQuery();
 
@@ -22,6 +26,16 @@ const LandingPage = () => {
       setId("userId", id);
     });
   }, []);
+
+  useEffect(() => {
+    if (!segments?.length) {
+      void utils.reading.countRemaining.invalidate();
+      void utils.reading.countRemaining.refetch();
+      void utils.reading.byUserId.invalidate();
+      void utils.reading.byUserId.refetch();
+      void utils.portion.unreadByChapterId.invalidate();
+    }
+  }, [segments]);
 
   return (
     <SafeAreaView className="bg-[#005596]">
@@ -48,13 +62,11 @@ const LandingPage = () => {
           </Text>
         )}
 
-        <TouchableOpacity onPress={() => setShowMore(!showMore)}>
+        <Pressable onPress={() => setShowMore(!showMore)}>
           <Text className="mx-auto py-5 text-lg leading-6 text-white">
             Whilst this terrible war is happening, many soldiers have been
             forced to close their Sefarim.{" "}
-            {!showMore ? (
-              <>Read more...</>
-            ) : (
+            {showMore && (
               <>
                 As a community we will be coming together to learn in their
                 merit to bring them strength and safety. Please, every week sign
@@ -63,8 +75,9 @@ const LandingPage = () => {
                 each of them too to return home safely.
               </>
             )}
+            {showMore ? " Show less..." : " Show more..."}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
         {(hasReading === false || !data?.settings.readOnly1) && (
           <LinkRow href="/choose" className="bg-brand-red">
             <Text className="text-xl font-semibold capitalize text-white">
@@ -73,11 +86,7 @@ const LandingPage = () => {
           </LinkRow>
         )}
         {userId && (
-          <ReadingList
-            userId={userId}
-            key={refresh?.toString()}
-            setHasReading={setHasReading}
-          />
+          <ReadingList userId={userId} setHasReading={setHasReading} />
         )}
       </View>
     </SafeAreaView>

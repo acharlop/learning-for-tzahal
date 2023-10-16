@@ -24,10 +24,7 @@ const ViewPortion = () => {
         readerId: userId,
         portionId: parseInt(portionId as string),
       });
-      router.push({
-        pathname: "/",
-        params: { refresh: "true" },
-      });
+      router.push("/");
     } catch (error) {
       console.error(error);
     }

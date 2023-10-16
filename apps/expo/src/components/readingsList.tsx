@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
+
+
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 import { Loader } from "./loader";
@@ -51,17 +53,22 @@ interface Props {
 }
 
 export const ReadingList = ({ userId, setHasReading }: Props) => {
-  const { data, refetch, isLoading } = api.reading.byUserId.useQuery({
-    readerId: userId,
-  });
+  const { data, refetch, isLoading } = api.reading.byUserId.useQuery(
+    {
+      readerId: userId,
+    },
+    {
+      refetchOnMount: true,
+    },
+  );
 
   useEffect(() => {
     setHasReading(!!data);
-  }, [data]);
+  }, [data, setHasReading, isLoading]);
 
   if (isLoading) return <Loader />;
 
-  if (!data) return null;
+  if (!data?.length) return null;
 
   return (
     <>
