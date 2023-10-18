@@ -5,8 +5,8 @@ import type { ExpoConfig } from "@expo/config";
 
 
 const defineConfig = (): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
+  name: "Learning For Tzahal",
+  slug: "learning-for-tzahal",
   scheme: "expo",
   version: "1.0.0",
   orientation: "portrait",
@@ -22,21 +22,21 @@ const defineConfig = (): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.learningfortzahal",
     supportsTablet: true,
   },
   android: {
-    package: "your.bundle.identifier",
+    package: "com.learningfortzahal",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#005596",
     },
   },
-  // extra: {
-  //   eas: {
-  //     projectId: "your-eas-project-id",
-  //   },
-  // },
+  extra: {
+    eas: {
+      projectId: "b023f562-abdf-4ed5-964c-df4d3e40ef81",
+    },
+  },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,

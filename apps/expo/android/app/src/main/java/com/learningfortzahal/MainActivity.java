@@ -1,4 +1,4 @@
-package your.bundle.identifier;
+package com.learningfortzahal;
 
 import android.os.Build;
 import android.os.Bundle;

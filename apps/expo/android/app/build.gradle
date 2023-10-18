@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'your.bundle.identifier'
+    namespace 'com.learningfortzahal'
     defaultConfig {
-        applicationId 'your.bundle.identifier'
+        applicationId 'com.learningfortzahal'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

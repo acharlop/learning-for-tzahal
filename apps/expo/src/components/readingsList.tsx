@@ -53,39 +53,37 @@ interface Props {
   setHasReading: (hasData: boolean) => void;
 }
 
-export const ReadingList = ({ userId, setHasReading }: Props) => {
-  const { data, refetch, isLoading } = api.reading.byUserId.useQuery(
+export const ReadingList = ({userId, setHasReading}: Props) => {
+  const {data, refetch, isLoading} = api.reading.byUserId.useQuery(
     {
       readerId: userId,
     },
     {
-      refetchOnMount: true,
+      onError: error => {
+        console.error(error)
+      },
     },
-  );
+  )
 
   useEffect(() => {
-    setHasReading(!!data?.length);
-  }, [data, setHasReading, isLoading]);
+    setHasReading(!!data?.length)
+  }, [data, setHasReading, isLoading])
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />
 
-  if (!data?.length) return null;
+  if (!data?.length) return null
 
   return (
     <>
-      <Text className="py-4 text-2xl font-bold text-white">
-        Your portion{data.length > 1 ? "s" : ""}:
-      </Text>
+      <Text className='py-4 text-2xl font-bold text-white'>Your portion{data.length > 1 ? 's' : ''}:</Text>
       <FlashList
         data={data}
         onRefresh={refetch}
         refreshing={isLoading}
         estimatedItemSize={20}
-        ItemSeparatorComponent={() => <View className="h-2" />}
-        renderItem={(p) => (
-          <ItemCard item={p.item} userId={userId} refetch={refetch} />
-        )}
+        ItemSeparatorComponent={() => <View className='h-2' />}
+        renderItem={p => <ItemCard item={p.item} userId={userId} refetch={refetch} />}
       />
     </>
-  );
-};
+  )
+}

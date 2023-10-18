@@ -35,6 +35,7 @@ export const readingRouter = createTRPCRouter({
     .input(z.object({ readerId: z.string() }))
     .query(async ({ ctx, input }) => {
       const settings = await ctx.prisma.settings.findFirstOrThrow({});
+
       return ctx.prisma.reading.findMany({
         where: { readerId: input.readerId, AND: { week: settings.week } },
         include: {

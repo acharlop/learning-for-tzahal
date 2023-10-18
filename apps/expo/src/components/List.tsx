@@ -36,7 +36,7 @@ export const List = <T,>({
         }}
       />
       <View className="h-full w-full p-4">
-        <Text className="mx-auto pb-5 text-center text-5xl font-bold text-white">
+        <Text className="mx-auto pt-5 pb-8 text-center text-5xl font-bold text-white">
           {title}
         </Text>
 

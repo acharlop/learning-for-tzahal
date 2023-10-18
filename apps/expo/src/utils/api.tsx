@@ -5,13 +5,15 @@ import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import superjson from "superjson";
 
-import type { AppRouter } from "@acme/api";
+
+
+import type {AppRouter} from '@acme/api'
 
 /**
  * A set of typesafe hooks for consuming your API.
  */
-export const api = createTRPCReact<AppRouter>();
-export { type RouterInputs, type RouterOutputs } from "@acme/api";
+export const api = createTRPCReact<AppRouter>()
+export {type RouterInputs, type RouterOutputs} from '@acme/api'
 
 /**
  * Extend this function when going to production by
@@ -27,22 +29,23 @@ const getBaseUrl = () => {
    * baseUrl to your production API URL.
    */
 
-  const debuggerHost = Constants.expoConfig?.hostUri;
-  const localhost = debuggerHost?.split(":")[0];
+  const debuggerHost = Constants.expoConfig?.hostUri
+  const localhost = debuggerHost?.split(':')[0]
 
   if (!localhost) {
-    return "https://learning-for-tzahal.vercel.app/";
+    return 'https://learning-for-tzahal.vercel.app/'
   }
-  return `http://${localhost}:3000`;
-};
+  // return `http://${localhost}:3000`
+  return 'https://1ad1-80-99-1-91.ngrok-free.app'
+}
 
 /**
  * A wrapper for your app that provides the TRPC context.
  * Use only in _app.tsx
  */
 
-export function TRPCProvider(props: { children: React.ReactNode }) {
-  const [queryClient] = React.useState(() => new QueryClient());
+export function TRPCProvider(props: {children: React.ReactNode}) {
+  const [queryClient] = React.useState(() => new QueryClient())
   const [trpcClient] = React.useState(() =>
     api.createClient({
       transformer: superjson,
@@ -50,20 +53,18 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           headers() {
-            const headers = new Map<string, string>();
-            headers.set("x-trpc-source", "expo-react");
-            return Object.fromEntries(headers);
+            const headers = new Map<string, string>()
+            headers.set('x-trpc-source', 'expo-react')
+            return Object.fromEntries(headers)
           },
         }),
       ],
     }),
-  );
+  )
 
   return (
     <api.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        {props.children}
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
     </api.Provider>
-  );
+  )
 }
