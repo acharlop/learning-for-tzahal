@@ -1,7 +1,13 @@
-export const runtime = "edge";
+export const runtime = 'edge'
 
 export default function HomePage() {
   return (
-    <main className="flex h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white"></main>
-  );
+    <>
+      <h1 className='pb-6 text-4xl font-bold'>Learning for Tzahal</h1>
+      <p>More info will be added once the app is available</p>
+      <a href='/privacy-policy' className='underline'>
+        Privacy Policy
+      </a>
+    </>
+  )
 }
