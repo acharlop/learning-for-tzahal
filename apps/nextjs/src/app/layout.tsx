@@ -6,11 +6,16 @@ import { Inter } from "next/font/google";
 
 
 
-import '~/styles/globals.css'
+import '~/styles/globals.css';
 
-import {headers} from 'next/headers'
 
-import {TRPCReactProvider} from './providers'
+
+import { headers } from 'next/headers';
+
+
+
+import { TRPCReactProvider } from './providers';
+
 
 const fontSans = Inter({
   subsets: ['latin'],
@@ -38,6 +43,7 @@ export const metadata: Metadata = {
     site: '@avi_aviously',
     creator: '@avi_aviously',
   },
+  icons: '/favicon.ico',
 }
 
 export default function Layout(props: {children: React.ReactNode}) {
