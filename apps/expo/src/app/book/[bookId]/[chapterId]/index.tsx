@@ -18,7 +18,7 @@ const ItemCard = ({ item, chapter }: Props) => {
   return (
     <LinkRow
       href={{
-        pathname: "/book/[bookId]/[chapterId]/[portionId]",
+        pathname: "/book/[bookId]/[chapterId]/[portionId]/",
         params: {
           portionId: item.id.toString(),
           chapterId: chapter!.id.toString(),

@@ -17,72 +17,98 @@ const updateReadingSchema = z.object({
 });
 
 export const readingRouter = createTRPCRouter({
-  all: publicProcedure.query(({ ctx }) => ctx.prisma.reading.findMany({})),
+  all: publicProcedure.query(({ctx}) => ctx.prisma.reading.findMany({})),
 
-  countRemaining: publicProcedure.query(async ({ ctx }) => {
-    const settings = await ctx.prisma.settings.findFirstOrThrow({});
+  allReadings: publicProcedure.query(async ({ctx}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
+
+    return ctx.prisma.reading.findMany({
+      where: {week: settings.week},
+      include: {
+        portion: {include: {chapter: {include: {book: true}}}},
+      },
+    })
+  }),
+
+  countRemaining: publicProcedure.query(async ({ctx}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
     const [total, count] = await Promise.all([
       ctx.prisma.portion.count({}),
       ctx.prisma.reading.count({
-        where: { week: settings.week },
+        where: {week: settings.week},
       }),
-    ]);
+    ])
 
-    return { settings, remaining: total - count };
+    return {settings, remaining: total - count}
   }),
 
-  byUserId: publicProcedure
-    .input(z.object({ readerId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const settings = await ctx.prisma.settings.findFirstOrThrow({});
+  byUserId: publicProcedure.input(z.object({readerId: z.string()})).query(async ({ctx, input}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
 
-      return ctx.prisma.reading.findMany({
-        where: { readerId: input.readerId, AND: { week: settings.week } },
-        include: {
-          portion: { include: { chapter: { include: { book: true } } } },
-        },
-        orderBy: { isRead: "asc" },
-      });
-    }),
+    return ctx.prisma.reading.findMany({
+      where: {readerId: input.readerId, AND: {week: settings.week}},
+      include: {
+        portion: {include: {chapter: {include: {book: true}}}},
+      },
+      orderBy: {isRead: 'asc'},
+    })
+  }),
 
-  create: publicProcedure
-    .input(createReadingSchema)
-    .mutation(async ({ ctx, input }) => {
-      const settings = await ctx.prisma.settings.findFirstOrThrow({});
+  create: publicProcedure.input(createReadingSchema).mutation(async ({ctx, input}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
 
-      return ctx.prisma.reading.create({
-        data: { ...input, week: settings.week },
-      });
-    }),
+    const reading = await ctx.prisma.reading.findFirst({
+      where: {portionId: input.portionId, AND: {week: settings.week}},
+    })
 
-  isRead: publicProcedure
-    .input(updateReadingSchema)
-    .mutation(async ({ ctx, input: { id, readerId } }) => {
-      const reading = await ctx.prisma.reading.findFirst({});
-      if (reading?.readerId !== readerId) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-        });
-      }
+    if (reading) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+      })
+    }
 
-      return ctx.prisma.reading.update({
-        where: { id },
-        data: { isRead: true },
-      });
-    }),
+    return ctx.prisma.reading.create({
+      data: {...input, week: settings.week},
+    })
+  }),
 
-  delete: publicProcedure
-    .input(updateReadingSchema)
-    .mutation(async ({ ctx, input: { id, readerId } }) => {
-      const reading = await ctx.prisma.reading.findFirst({});
-      if (reading?.readerId !== readerId) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-        });
-      }
+  isRead: publicProcedure.input(updateReadingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
 
-      return ctx.prisma.reading.delete({
-        where: { id },
-      });
-    }),
-});
+    const reading = await ctx.prisma.reading.findFirst({
+      where: {id, AND: {week: settings.week, AND: {readerId}}},
+    })
+
+    if (!reading) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+      })
+    }
+
+    return ctx.prisma.reading.update({
+      where: {id},
+      data: {isRead: true},
+    })
+  }),
+
+  delete: publicProcedure.input(updateReadingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
+    const {week} = settings
+
+    console.log({week})
+
+    const reading = await ctx.prisma.reading.findFirst({
+      where: {id, AND: {week, AND: {readerId}}},
+    })
+
+    if (!reading) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+      })
+    }
+
+    return ctx.prisma.reading.delete({
+      where: {id},
+    })
+  }),
+})

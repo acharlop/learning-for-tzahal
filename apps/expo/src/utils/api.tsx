@@ -35,8 +35,8 @@ const getBaseUrl = () => {
   if (!localhost) {
     return 'https://learning-for-tzahal.vercel.app/'
   }
-  // return `http://${localhost}:3000`
-  return 'https://1ad1-80-99-1-91.ngrok-free.app'
+  return `http://${localhost}:3000`
+  // return 'https://7461-80-99-1-91.ngrok-free.app'
 }
 
 /**

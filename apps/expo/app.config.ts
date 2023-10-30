@@ -1,47 +1,43 @@
 import type { ExpoConfig } from "@expo/config";
 
-
-
-
-
 const defineConfig = (): ExpoConfig => ({
-  name: "Learning For Tzahal",
-  slug: "learning-for-tzahal",
-  scheme: "expo",
-  version: "1.0.0",
-  orientation: "portrait",
-  icon: "./assets/icon.png",
-  userInterfaceStyle: "light",
+  name: 'Learning For Tzahal',
+  slug: 'learning-for-tzahal',
+  scheme: 'expo',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './assets/icon.png',
+  userInterfaceStyle: 'light',
   splash: {
-    image: "./assets/icon.png",
-    resizeMode: "contain",
-    backgroundColor: "#005596",
+    image: './assets/splash.png',
+    resizeMode: 'contain',
+    backgroundColor: '#FFFFFF',
   },
   updates: {
     fallbackToCacheTimeout: 0,
   },
-  assetBundlePatterns: ["**/*"],
+  assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: "com.learningfortzahal",
+    bundleIdentifier: 'com.learningfortzahal',
     supportsTablet: true,
   },
   android: {
-    package: "com.learningfortzahal",
+    package: 'com.learningfortzahal',
     adaptiveIcon: {
-      foregroundImage: "./assets/icon.png",
-      backgroundColor: "#005596",
+      foregroundImage: './assets/adaptive-icon.png',
+      backgroundColor: '#FFFFFF',
     },
   },
   extra: {
     eas: {
-      projectId: "b023f562-abdf-4ed5-964c-df4d3e40ef81",
+      projectId: 'b023f562-abdf-4ed5-964c-df4d3e40ef81',
     },
   },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
   },
-  plugins: ["expo-router", "./expo-plugins/with-modify-gradle.js"],
-});
+  plugins: ['expo-router', './expo-plugins/with-modify-gradle.js'],
+})
 
-export default defineConfig;
+export default defineConfig
