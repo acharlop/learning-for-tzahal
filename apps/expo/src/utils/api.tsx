@@ -33,7 +33,7 @@ const getBaseUrl = () => {
   const localhost = debuggerHost?.split(':')[0]
 
   if (!localhost) {
-    return 'https://learning-for-tzahal.vercel.app/'
+    return 'https://learning-for-tzahal.vercel.app'
   }
   return `http://${localhost}:3000`
   // return 'https://7461-80-99-1-91.ngrok-free.app'

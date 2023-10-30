@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import {Text, View} from 'react-native'
-import {FlashList} from '@shopify/flash-list'
+import { Text, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
-import {api} from '~/utils/api'
-import type {RouterOutputs} from '~/utils/api'
-import {LinkRow} from './LinkRow'
-import {Loader} from './loader'
+
+
+import { api } from '~/utils/api';
+import type { RouterOutputs } from '~/utils/api';
+import { LinkRow } from './LinkRow';
+import { Loader } from './loader';
+
 
 interface ItemProps {
   item: RouterOutputs['reading']['byUserId'][number]
@@ -14,14 +17,13 @@ interface ItemProps {
 }
 
 const ItemCard = ({item}: ItemProps) => {
+  console.log(item)
   return (
     <LinkRow
       href={{
-        pathname: '/book/[bookId]/[chapterId]/[portionId]/edit',
+        pathname: '/reading/[id]',
         params: {
-          chapterId: item.id.toString(),
-          bookId: item.portion.chapter.book.id.toString(),
-          portionId: item.id.toString(),
+          id: item.id.toString(),
         },
       }}
       className='flex flex-col rounded-lg bg-white/10 px-4 py-2'

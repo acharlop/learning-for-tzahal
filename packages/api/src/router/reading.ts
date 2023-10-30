@@ -11,10 +11,10 @@ const createReadingSchema = z.object({
   portionId: z.number(),
 });
 
-const updateReadingSchema = z.object({
+const readingSchema = z.object({
   id: z.number(),
   readerId: z.string(),
-});
+})
 
 export const readingRouter = createTRPCRouter({
   all: publicProcedure.query(({ctx}) => ctx.prisma.reading.findMany({})),
@@ -50,7 +50,19 @@ export const readingRouter = createTRPCRouter({
       include: {
         portion: {include: {chapter: {include: {book: true}}}},
       },
-      orderBy: {isRead: 'asc'},
+      orderBy: {id: 'asc'},
+    })
+  }),
+
+  byId: publicProcedure.input(readingSchema).query(async ({ctx, input}) => {
+    const settings = await ctx.prisma.settings.findFirstOrThrow({})
+
+    return ctx.prisma.reading.findFirstOrThrow({
+      where: {id: input.id, AND: {readerId: input.readerId, AND: {week: settings.week}}},
+      include: {
+        portion: {include: {chapter: {include: {book: true}}}},
+      },
+      orderBy: {id: 'asc'},
     })
   }),
 
@@ -72,7 +84,7 @@ export const readingRouter = createTRPCRouter({
     })
   }),
 
-  isRead: publicProcedure.input(updateReadingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
+  isRead: publicProcedure.input(readingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
     const settings = await ctx.prisma.settings.findFirstOrThrow({})
 
     const reading = await ctx.prisma.reading.findFirst({
@@ -91,7 +103,7 @@ export const readingRouter = createTRPCRouter({
     })
   }),
 
-  delete: publicProcedure.input(updateReadingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
+  delete: publicProcedure.input(readingSchema).mutation(async ({ctx, input: {id, readerId}}) => {
     const settings = await ctx.prisma.settings.findFirstOrThrow({})
     const {week} = settings
 

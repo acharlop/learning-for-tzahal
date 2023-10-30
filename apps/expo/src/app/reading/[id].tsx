@@ -6,25 +6,30 @@ import {useIds} from '~/stores/ids'
 import {api} from '~/utils/api'
 
 const ViewPortion = () => {
-  const {portionId} = useGlobalSearchParams()
+  const {id: idString} = useGlobalSearchParams()
+  const utils = api.useContext()
   const {userId} = useIds()
+  const id = parseInt(idString as string)
 
-  const {data} = api.portion.byId.useQuery({
-    id: parseInt(portionId as string),
+  const {data} = api.reading.byId.useQuery({
+    id,
+    readerId: userId,
   })
 
   const {mutate: removeReading} = api.reading.delete.useMutation({
     onSuccess: () => {
+      void utils.reading.countRemaining.invalidate()
+      void utils.reading.byUserId.invalidate()
+      void utils.portion.unreadByChapterId.invalidate()
       router.push('/')
     },
   })
 
   const onRemovePress = () => {
-    console.log('remove', {userId, portionId})
     try {
       removeReading({
         readerId: userId,
-        id: parseInt(portionId as string),
+        id,
       })
     } catch (error) {
       console.error(error)
@@ -33,8 +38,8 @@ const ViewPortion = () => {
 
   const title = () => {
     if (!data) return ''
-    if (data.chapter.name === data.name) return data.name
-    return `${data.chapter.name} - ${data.name}`
+    if (data.portion.chapter.name === data.portion.name) return data.portion.name
+    return `${data.portion.chapter.name} - ${data.portion.name}`
   }
 
   return (
