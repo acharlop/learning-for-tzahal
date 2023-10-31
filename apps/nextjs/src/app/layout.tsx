@@ -39,9 +39,12 @@ export const metadata: Metadata = {
 export default function Layout(props: {children: React.ReactNode}) {
   return (
     <html lang='en'>
-      <body className={['min-h-screen bg-gradient-to-b from-[#2e026d] to-[#15162c] font-sans', fontSans.variable].join(' ')}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className={['bg-gradient-to-b from-[#2e026d] to-[#15162c] font-sans', fontSans.variable].join(' ')}>
         <TRPCReactProvider headers={headers()}>
-          <main className='flex flex-col items-center px-10 py-20 text-white lg:px-0'>{props.children}</main>
+          <main className='min-h-screen flex flex-col items-center px-10 text-white lg:px-0'>{props.children}</main>
         </TRPCReactProvider>
       </body>
     </html>

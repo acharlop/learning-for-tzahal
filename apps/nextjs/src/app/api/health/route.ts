@@ -1,4 +1,4 @@
-export const GET = async () => {
+export const GET = () => {
   return new Response(JSON.stringify({status: 'ok'}), {
     status: 200,
     headers: {

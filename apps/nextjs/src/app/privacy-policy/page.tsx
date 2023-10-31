@@ -1,6 +1,6 @@
 const page = () => {
   return (
-    <div className='max-w-2xl'>
+    <div className='max-w-2xl py-20'>
       <h1 className='text-4xl font-bold'>Privacy Policy</h1>
 
       <h3 className='font-2xl font-bold'>Last updated: 30/10/2023</h3>
